@@ -3,49 +3,49 @@ package com.imihirpaldhikar.pokemon
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.imihirpaldhikar.pokemon.ui.theme.PokemonTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             PokemonTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    color = MaterialTheme.colors.background,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
+                val navigationController = rememberNavController()
+                NavHost(
+                    navController = navigationController,
+                    startDestination = "home_screen"
                 ) {
-                    Greeting("Android")
+                    composable(route = "home_screen") {
+
+                    }
+                    composable(route = "details_screen/{dominantColor}/{pokemonName}",
+                        arguments = listOf(
+                            navArgument(name = "dominantColor") {
+                                type = NavType.IntType
+                            },
+                            navArgument(name = "pokemonName") {
+                                type = NavType.StringType
+                            }
+                        )) {
+                        val dominantColor = remember {
+                            val color = it.arguments?.getInt("dominantColor")
+                            color?.let { Color(color = color) }
+                        }
+                        val pokemonName = remember {
+                            it.arguments?.getString("pokemonName")
+                        }
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center, content = {
-        Text(text = "Hello $name!")
-    })
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    PokemonTheme {
-        Greeting("Android")
     }
 }

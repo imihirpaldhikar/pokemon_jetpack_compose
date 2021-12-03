@@ -68,6 +68,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0"
     implementation "androidx.navigation:navigation-compose:2.4.0-beta02"
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc02"
+    implementation 'com.android.support:palette-v7:28.0.0'
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
